@@ -1,0 +1,34 @@
+.chat-box {
+    background-color: #DCDCDC;
+    border: 1px solid black ;
+    padding: 20px 20px 20px 70px;
+    padding: 5% 5% 5% 10%;
+    border-radius: 10px;
+}
+
+/* Estilo para el contenedor del mensaje del usuario */
+.user-message {
+    text-align: right;
+    background-color: #e3e5fe;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    max-width: 70%;
+    float: right;
+    clear: both;
+}
+
+/* Estilo para el contenedor del mensaje del asistente */
+.assistant-message {
+    text-align: left;
+    background-color: #bec2ff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    max-width: 70%;
+    float: left;
+    clear: both;
+}
+

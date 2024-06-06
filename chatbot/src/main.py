@@ -23,7 +23,7 @@ app.add_middleware(
 
 chat_history = memory.buffer_as_messages
 
-agent_executor.invoke({"input": "Hola, Buen dia! Puedes presentarte y decir cual es tu funcion todo en español", "chat_history": chat_history,})
+#agent_executor.invoke({"input": "Hola, Buen dia! Puedes presentarte y decir cual es tu funcion todo en español", "chat_history": chat_history,})
 
 @async_retry(max_retries=10, delay=1)
 async def invoke_agent_with_retry(query: str):
@@ -38,8 +38,8 @@ async def invoke_agent_with_retry(query: str):
 async def get_status():
     return {"status": "running"}
 
-@app.post("/education-rag-agent")
-async def query_hospital_agent(query: EduQueryInput) -> EduQueryOutput:
+@app.post("/chatbot-rag-agent")
+async def query_agent(query: EduQueryInput) -> EduQueryOutput:
     query_response = await invoke_agent_with_retry(query.text)
 
     return query_response

@@ -1,12 +1,11 @@
 import os
 
-from chatbot.src.chains.chatbot_dependencia_chain import dependecia_vector_chain
-from chatbot.src.chains.chatbot_cypher_chain import chatbot_cypher_chain
-from chatbot.src.tools.formats import get_format
+from chains.chatbot_dependencia_chain import dependecia_vector_chain
+from chains.chatbot_cypher_chain import chatbot_cypher_chain
+from tools.formats import get_format
 from langchain import hub
 from langchain.agents import AgentExecutor, Tool, create_openai_functions_agent
 from langchain_openai import ChatOpenAI
-from langchain_intro.tools import get_format
 from langchain.memory import ConversationBufferMemory
 
 CHATBOT_AGENT_MODEL = os.getenv("CHATBOT_AGENT_MODEL")
@@ -21,25 +20,25 @@ tools = [
     Tool(
         name="Informacion",
         func=dependecia_vector_chain.invoke,
-        description="""Úsalo cuando necesites responder preguntas sobre informacion de las dependencias de la Universidad. Todo lo relacionado con una dependencia en especifico y varias, las puedes preguntar por este metodo. Las divisiones no son dependencias directas. Pase la pregunta completa como entrada a la herramienta. Por ejemplo, si la pregunta es "¿Cual es la mision de la vicerectoria administrativa?", la respuesta debe ser "¿Cual es la mision de la vicerectoria administrativa?"
+        description="""Use this when you need to answer questions about information regarding the dependencies of the University. Anything related to a specific dependency or multiple dependencies can be asked through this method. Divisions are not direct dependencies. Pass the complete question as input to the tool. For example, if the question is "What is the mission of the administrative vice-rectorate?", the response should be "What is the mission of the administrative vice-rectorate?"
         """,
     ),
     Tool(
         name="Grafos",
         func=chatbot_cypher_chain.invoke,
-        description="""Úsalo para responder preguntas sobre las relaciones entre dependencias y sus divisiones. Utiliza todo el prompt como entrada para la herramienta. Por ejemplo, si el prompt es "¿Cuales son las divisiones de la Vicerectoria Administrativa?", la entrada debe ser "¿Cuales son las divisiones de la Vicerectoria Administrativa?"
+        description="""Use this to answer questions about the relationships between dependencies and their divisions. Use the entire prompt as input to the tool. For example, if the prompt is "What are the divisions of the Administrative Vice-Rectorate?", the input should be "What are the divisions of the Administrative Vice-Rectorate?"
         """,
     ),
     Tool(
         name="Formatos",
         func=get_format,
-        description="""Úsalo cuando se le pregunte sobre formatos de procesos. Esta herramienta solo puede obtener el enlace de un proceso en especifico. Esta herramienta devuelve el enlace de un determinado proceso. No pase la palabra "formato" o "proceso" como entrada, solo el nombre del formato o proceso. Por ejemplo, si la pregunta es "¿Cuál es el formato de cancelación?", la entrada debe ser "cancelar", sin tildes o el verbo raiz.
+        description="""Use this when asked about process formats. This tool can only obtain the link to a specific process. This tool returns the link to a given process. Do not pass the word "format" or "process" as input, only the name of the format or process. For example, if the question is "What is the cancellation format?", the input should be "cancel", without accents or the root verb.
         """,
     ),
     Tool(
         name="Default",
         func=default_resp,
-        description="Úsalo cuando la pregunta no esté relacionada con el contexto universitario."
+        description="""Use this when the question is not related to the university context."""
 
     ),
 ]

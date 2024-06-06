@@ -17,21 +17,21 @@ graph = Neo4jGraph(
 graph.refresh_schema()
 
 cypher_generation_template = """
-Tarea:
-Genera una consulta Cypher para una base de datos de grafos Neo4j.
+Task:
+Generate a Cypher query for a Neo4j graph database.
 
-Instrucciones:
-Utiliza solo los tipos de relaciones y propiedades proporcionados en el esquema.
-No utilices ningún otro tipo de relaciones o propiedades que no estén proporcionados.
+Instructions:
+Use only the types of relationships and properties provided in the schema.
+Do not use any other types of relationships or properties that are not provided.
 
-Esquema:
+Schema:
 {schema}
 
-Nota:
-No incluyas explicaciones ni disculpas en tus respuestas.
-No respondas a ninguna pregunta que pueda preguntar cualquier otra cosa que no sea construir una declaración Cypher. No incluyas ningún texto excepto
-la declaración Cypher generada. Asegúrate de que la dirección de la relación sea correcta en tus consultas. Asegúrate de aliasar correctamente tanto las entidades como las relaciones.
-No ejecutes ninguna consulta que añada o elimine de la base de datos. Asegúrate de aliasar todas las declaraciones que siguen como con declaración (e.g. WITH v as visit, c.billing_amount as billing_amount) Si necesitas dividir números, asegúrate de filtrar el denominador para que no sea cero.
+Note:
+Do not include explanations or apologies in your answers.
+Do not answer any question that asks anything other than constructing a Cypher statement. Do not include any text except the generated Cypher statement. Ensure that the direction of the relationship is correct in your queries. Make sure to correctly alias both entities and relationships.
+Do not execute any query that adds or deletes from the database.
+If you need to divide numbers, ensure to filter the denominator to avoid zero.
 
 Ejemplos:
 # Listar todas las dependencias con sus divisiones.
@@ -83,10 +83,10 @@ WHERE toLower(div.mision) CONTAINS toLower('Mision especifica')
 RETURN d.nombre AS dependencia, div.nombre AS division
 
 
-Asegúrate de usar IS NULL o IS NOT NULL al analizar propiedades faltantes.
-Nunca devuelvas propiedades de incrustación en tus consultas. Nunca debes incluir el declaración "GROUP BY" en tu consulta. Asegúrate de aliasar todas las declaraciones que siguen como con la declaración.
+Ensure to use IS NULL or IS NOT NULL when analyzing missing properties.
+Never return embedding properties in your queries. Never include the "GROUP BY" statement in your query. Make sure to alias all subsequent statements as with the declaration.
 
-La pregunta es:
+The question is:
 {question}
 """
 
@@ -94,26 +94,26 @@ cypher_generation_prompt = PromptTemplate(
     input_variables=["schema", "question"], template=cypher_generation_template
 )
 
-qa_generation_template = """Eres un asistente que toma los resultados de una consulta Cypher de Neo4j y forma una respuesta comprensible para el usuario. La sección de resultados de la consulta contiene los resultados de una consulta Cypher que se generó a partir de la pregunta en lenguaje natural de un usuario. La información proporcionada es autoritativa, nunca debes dudar de ella ni intentar usar tu conocimiento interno para corregirla. Haz que la respuesta suene como una respuesta a la pregunta.
+qa_generation_template = """You are an assistant who takes the results of a Cypher query from Neo4j and forms an understandable response for the user. The query results section contains the results of a Cypher query that was generated from the user's natural language question. The information provided is authoritative; you should never doubt it or attempt to use your internal knowledge to correct it. Make the response sound like an answer to the question.
 
-Resultados de la Consulta:
+Query Results:
 {context}
 
-Pregunta:
+Question:
 {question}
 
-Si la información proporcionada está vacía, di que no sabes la respuesta.
-La información vacía se ve así: []
+If the information provided is empty, say you do not know the answer.
+Empty information looks like this: []
 
-Si la información no está vacía, debes proporcionar una respuesta utilizando los resultados. Si la pregunta implica una duración de tiempo, asume que los resultados de la consulta están en unidades de días a menos que se especifique lo contrario.
+If the information is not empty, you must provide an answer using the results. If the question implies a duration of time, assume that the query results are in units of days unless otherwise specified.
 
-Cuando se retorne mas de un resultado. Por ejemplo cuantas divisiones o cuales divisiones, siempre debes retornar una lista numerada.
+When more than one result is returned, for example, how many divisions or which divisions, you should always return a numbered list.
 
-Cuando se proporcionen nombres en los resultados de la consulta, como nombres de dependencias o divisiones, ten cuidado con cualquier nombre que tenga comas u otra puntuación. Asegúrate de devolver cualquier lista de nombres de manera que no sea ambigua y permita a alguien distinguir cuáles son los nombres completos.
+When names are provided in the query results, such as names of dependencies or divisions, be careful with any names that have commas or other punctuation. Ensure to return any list of names in a way that is unambiguous and allows someone to distinguish which are the complete names.
 
-Nunca digas que no tienes la información correcta si hay datos en los resultados de la consulta. Asegúrate de mostrar todos los resultados relevantes de la consulta si te lo piden.
+Never say you do not have the correct information if there are data in the query results. Ensure to display all relevant query results if asked.
 
-Respuesta Útil:
+Helpful Answer:
 """
 
 qa_generation_prompt = PromptTemplate(

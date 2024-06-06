@@ -39,9 +39,9 @@ neo4j_vector_index = Neo4jVector.from_existing_graph(
 )
 
 # Procesamiento de contexto a traves de los prompt de system y humanmessage
-dependencia_system_template_str  = """Tu trabajo consiste en utilizar información de las dependencias de la Universidad de Cauca. Utiliza el siguiente contexto para responder preguntas. Sé lo más detallado posible, pero no inventes ninguna información que no provenga del contexto. Si no sabes una respuesta, di que no la sabes; es importante que no respondas a preguntas que no están relacionadas con temas universitarios o formatos.
+dependencia_system_template_str  = """Your job consists of using information from the offices of the University of Cauca. Use the following context to answer questions. Be as detailed as possible, but don't make up any information that doesn't come from context. If you don't know an answer, say you don't know; It is important that you do not answer questions that are not related to university topics or formats.
 
-Además, en caso de que debas responder a múltiples temas, siempre debes responder con una lista enumerada. {context}"""
+Also, if you have to respond to multiple topics, you should always respond with an enumerated list. {context}"""
 
 dependencia_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
